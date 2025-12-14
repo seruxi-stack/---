@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>عالم فلفل</title>
+
+<style>
+:root{
+  --ink:#2f3e2f;
+  --sage:#7f9f8a;
+  --olive:#5f7a67;
+  --sand:#efe8dc;
+  --rose:#e7b6c7; /* وردي باودر خفيف جدًا */
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  min-height:100vh;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  background:
+    radial-gradient(1200px 600px at 10% 10%, #f6f1ea 0%, transparent 40%),
+    radial-gradient(900px 500px at 90% 20%, #e9f0ea 0%, transparent 45%),
+    linear-gradient(180deg, #f4efe6, var(--sand));
+  color:var(--ink);
+  overflow:hidden;
+}
+
+/* شريط علوي هادئ */
+header{
+  position:fixed; inset:12px 12px auto 12px;
+  display:flex; justify-content:space-between; align-items:center;
+  padding:10px 14px;
+  background:rgba(255,255,255,.6);
+  backdrop-filter: blur(8px);
+  border-radius:14px;
+  box-shadow:0 10px 25px rgba(0,0,0,.06);
+}
+
+header .title{
+  font-weight:600; letter-spacing:.2px;
+}
+header .title span{opacity:.7}
+
+/* أزرار */
+.btn{
+  border:0; border-radius:12px;
+  padding:8px 12px;
+  background:var(--sage);
+  color:#fff; cursor:pointer;
+}
+.btn.alt{ background:var(--olive); }
+
+/* عناصر تتحرك دائمًا (ببطء) */
+.floating{
+  position:absolute;
+  animation: float 12s ease-in-out infinite alternate;
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,.08));
+}
+@keyframes float{
+  from{ transform: translateY(0) }
+  to{ transform: translateY(-22px) }
+}
+
+/* عناصر بالضغط */
+.clickable{
+  position:absolute; cursor:pointer;
+  transition: transform .25s ease, filter .25s ease;
+}
+.clickable:hover{
+  transform: scale(1.05);
+  filter: drop-shadow(0 10px 16px rgba(0,0,0,.12));
+}
+
+/* أوراق خفيفة */
+.leaf{
+  position:absolute;
+  width:18px; height:10px;
+  background:var(--sage);
+  border-radius: 0 100% 0 100%;
+  opacity:.55;
+  animation: drift 18s linear infinite;
+}
+@keyframes drift{
+  from{ transform: translateX(-10vw) translateY(0) rotate(0deg) }
+  to{ transform: translateX(110vw) translateY(-30px) rotate(180deg) }
+}
+
+/* نافذة الصور (نظيفة وواضحة) */
+#modal{
+  position:fixed; inset:0;
+  background:rgba(20,30,20,.85);
+  display:none; align-items:center; justify-content:center;
+  z-index:999;
+}
+#modal figure{
+  margin:0; max-width:min(92vw,900px);
+}
+#modal img{
+  width:100%; height:auto; display:block;
+  border-radius:18px;
+  box-shadow:0 30px 60px rgba(0,0,0,.35);
+}
+#modal figcaption{
+  margin-top:10px; color:#e7efe7; opacity:.9;
+  text-align:center;
+}
+#close{
+  position:absolute; top:18px; right:22px;
+  font-size:28px; color:#fff; cursor:pointer;
+}
+
+/* تذييل صغير */
+footer{
+  position:fixed; bottom:12px; left:50%;
+  transform:translateX(-50%);
+  opacity:.7; font-size:13px;
+}
+
+/* استجابة للموبايل */
+@media (max-width:600px){
+  header{ inset:8px }
+  .floating{ animation-duration: 14s }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="title">
+    عالم فلفل <span>— مساحة نباتية هادئة (◍•ᴗ•◍)✧*</span>
+  </div>
+  <div>
+    <button class="btn" id="musicBtn">موسيقى XD</button>
+    <button class="btn alt" id="aboutBtn">عنّي ^^</button>
+  </div>
+</header>
+
+<footer>
+  اضغطي على العناصر لفتح الصور — بعضُها يتحرّك دائمًا، والبعض عند الضغط فقط ><  
+</footer>
+
+<!-- نافذة الصور -->
+<div id="modal">
+  <span id="close" onclick="closeModal()">×</span>
+  <figure>
+    <img id="modalImg" alt="">
+    <figcaption id="cap"></figcaption>
+  </figure>
+</div>
+
+<audio id="music" loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3">
+</audio>
+
+<script>
+/* موسيقى */
+const music=document.getElementById('music');
+document.getElementById('musicBtn').onclick=()=>{
+  music.paused ? music.play() : music.pause();
+};
+
+/* نافذة الصور */
+function openModal(src, cap){
+  modalImg.src=src;
+  cap && (document.getElementById('cap').textContent=cap);
+  modal.style.display='flex';
+}
+function closeModal(){ modal.style.display='none'; }
+
+/* أوراق طايرة (خفيفة) */
+for(let i=0;i<8;i++){
+  const l=document.createElement('div');
+  l.className='leaf';
+  l.style.top=Math.random()*80+'vh';
+  l.style.left=(-10 - Math.random()*20)+'vw';
+  l.style.animationDelay=(Math.random()*10)+'s';
+  document.body.appendChild(l);
+}
+</script>
+
+<!-- عناصر تتحرك دائمًا (نباتات/حشرات هادئة) -->
+<img class="floating" src="https://i.imgur.com/jw7XcXG.png"
+     style="width:64px; left:8%; bottom:18%; animation-duration:13s" alt="نبات">
+
+<img class="floating" src="https://i.imgur.com/4AiXzf8.png"
+     style="width:36px; left:22%; top:30%; animation-duration:15s" alt="فراشة">
+
+<img class="floating" src="https://i.imgur.com/QZ6FJpL.png"
+     style="width:54px; right:10%; bottom:20%; animation-duration:14s" alt="سمكة">
+
+<!-- عناصر بالضغط (تفتح صور واضحة) -->
+<img class="clickable" src="https://i.imgur.com/JYUB0m3.png"
+     style="width:88px; left:36%; bottom:16%"
+     onclick="openModal(this.src,'شخصية مفضّلة ^o^')" alt="شخصية">
+
+<img class="clickable" src="https://i.imgur.com/6qK4QnM.png"
+     style="width:92px; right:34%; bottom:18%"
+     onclick="openModal(this.src,'قطة — مزاج هادئ ಠ_ಠ')" alt="قطة">
+
+<img class="clickable" src="https://i.imgur.com/yXOvdOS.png"
+     style="width:74px; right:22%; top:28%"
+     onclick="openModal(this.src,'تفصيلة صغيرة (つ≧▽≦)つ')" alt="تفصيلة">
+
+<!-- نافذة عنّي (مختصرة وفصيحة) -->
+<script>
+document.getElementById('aboutBtn').onclick=()=>{
+  openModal(
+    'https://i.imgur.com/8QfQY0y.jpg',
+    'مساحة شخصية هادئة؛ نباتات، كائنات لطيفة، وحضور بسيط… بدون ضجيج XD'
+  );
+};
+</script>
+
+</body>
+</html>
